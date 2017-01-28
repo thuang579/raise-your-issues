@@ -1,0 +1,219 @@
+<!doctype html>
+
+
+<head>
+  <meta charset="utf-8">
+
+  <title>RAISE YOUR ISSUES</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <!-- font awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+  <!-- Bootstrap JS -->
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+
+  <!--Handlebars-->
+  <script src="handlebars-v4.0.5.js"></script>
+
+
+  <!-- Own Styles -->
+  <link rel="stylesheet" href="style.css">
+
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+
+
+  <!-- Isotope -->
+  <script src="https://unpkg.com/isotope-layout@3.0/dist/isotope.pkgd.min.js"></script>
+
+
+  <!-- For From Media -->
+  <link rel="stylesheet" href="styles/normalize.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="styles/html5bp.css" media="screen" charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  </script>
+
+</head>
+
+
+
+<body>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid" style="background:white">
+      <div class="navbar-header text-danger" style="color:black; text-align:center">
+        <h1>RAISE YOUR ISSUES</h1>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+
+<!-- //////////////////// MESSAGES FROM THE PEOPLE  //////////////////// -->
+<div id = "from-ppl">
+
+<h2 style="text-align:center; color:white;">FROM THE PEOPLE</h2>
+
+  <div class="container">
+    <div class="panel-group">
+      <div class="panel panel-danger">
+        <div class="panel-heading" style="color:black; background-color:#f5f5f5;">Write Your Message</div>
+        <div class="panel-body">
+          <form action="" id="message-form">
+            <div class="form-group">
+              <label>Message:</label>
+              <textarea id="message" type="text" class="form-control"></textarea>
+            </div>
+            <button class="btn btn-default">Post For The WWW</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">Your Issues</div>
+
+        <h4>
+        <div class="panel-body">
+
+          <div class="message-board">
+          </div>
+
+        </div>
+        </h4>
+
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+
+<!-- //////////////////// MESSAGES FROM THE MEDIA //////////////////// -->
+<div id = "from-media" style="background-color:white; padding-bottom:2em">
+
+<h2 style="  text-align:center; padding-top:1em; padding-bottom: 1em; color:black;">FROM THE MEDIA</h2>
+
+<header>
+  <section class="container">
+    <a style="padding-left:5em; color:black" class="dropdown-feed" id="newyorktimes" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FPolitics.xml">New York Times</a>
+    <a style="padding-left:5em; color:black" class="dropdown-feed" id="newyorktimes" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.cnn.com%2Frss%2Fcnn_allpolitics.rss">CNN</a>
+    <a style="padding-left:5em; color:black" class="dropdown-feed" id="fox" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.foxnews.com%2Ffoxnews%2Fpolitics">Fox News</a>
+    <a style="padding-left:5em; color:black" class="dropdown-feed" id="breitbart" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.feedburner.com%2Fbreitbart">Breitbart</a>
+  </section>
+</header>
+
+
+<div id="popUp" class="loader" class="hidden">
+</div>
+
+
+<section id="main" class="container">
+</section>
+
+
+<!--Handlebars-->
+
+    <script id="articleItemTemplate" type="text/x-handlebars-template">
+      <article class="article" data-i="{{i}}">
+
+        <section class="featuredImage">
+            <img src="{{imageurl}}" alt="" />
+        </section>
+
+        <section class="articleContent">
+            <a href="#from-media"><h3>{{title}}</h3></a>
+        </section>
+
+        <div class="clearfix"></div>
+
+      </article>
+    </script>
+
+
+    <script id="popUpTemplate" type="text/x-handlebars-template">
+
+      <a href="#from-media" class="closePopUp">X</a>
+
+      <div class="container">
+        <h1>{{title}}</h1>
+        <p>
+          {{{description}}}
+        </p>
+        <a href="{{link}}" class="popUpAction" target="_blank">Read more from source</a>
+      </div>
+
+    </script>
+
+
+</div>
+
+
+
+
+
+<!-- //////////////////// FROM RESOURCES //////////////////// -->
+<div id = "from-resources" style ="padding-top:3em">
+
+<h2 style="  text-align:center; color:white;">FROM RESOURCES</h2>
+
+
+<div class="container">
+  <div class="panel-group">
+    <div class="panel panel-danger">
+      <div class="panel-heading" style="color:black; background-color:#f5f5f5;">Links</div>
+      <div class="panel-body">
+
+        <ul id="link-list">
+          <a href="#from-resources">10 Actions Every 10 Days for 100 Days</a><br/>
+          <a href="#from-resources">INDIVISIBLE GUIDE</a><br/>
+          <a href="#from-resources">UNITY PROJECT</a><br/>
+          <a href="#from-resources">TRUMP TRACKER</a><br/>
+          <a href="#from-resources">WORLD CAFE</a><br/>
+          <a href="#from-resources">PETITIONS</a><br/>
+          <a href="#from-resources">DEMOCRATIC SOCIALISTS OF AMERICA</a><br/>
+          <a href="#from-resources">"THE WISDOM OF SUSTAINABILITY"</a><br/>
+          <a href="#from-resources">REAL TAX REFORM</a><br/>
+          <a href="#from-resources">HE WILL NOT DIVIDE US</a>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+
+
+
+<!-- /////////////////////////////////////// -->
+
+<!-- js -->
+<script src="app.js"></script>
+
+
+</body>
+
+</html>
