@@ -64,13 +64,7 @@
 
   <!-- //////////////////// TEST MINI POSTER  //////////////////// -->
 
-  <input class="box-color-input" type="text" placeholder="Poster Color">
-  <input class="box-color-note" type="text" placeholder="Poster Message">
-  <button class="box-creator-button">Create a Poster!</button>
-
-  <div class="mpContainer"></div>
-
-
+  
 
 
 
@@ -84,11 +78,17 @@
       <div class="panel panel-danger">
         <div class="panel-heading" style="color:black; background-color:#f5f5f5;">Write Your Message</div>
         <div class="panel-body">
+
+
           <form action="" id="message-form">
             <div class="form-group">
               <label>Message:</label>
               <textarea id="message" type="text" class="form-control"></textarea>
             </div>
+
+            <input class="poster-color-input" type="text" placeholder="Poster Color">
+
+
             <button class="btn btn-default">Post For The WWW</button>
           </form>
         </div>
@@ -141,6 +141,28 @@
 
 <section id="main" class="container">
 </section>
+
+
+
+<!--Handlebars for Posters-->
+<script id="posterTemplate" type="text/x-handlebars-template">
+  <div class="from-people" data-id="{{id}}" style="background-color:{{posterColor}}">
+
+
+    <div class="poster"  >
+      {{posterText}}
+    </div>
+
+    <div class="poster-actions">
+      <span class="vote-count">{{voteCount}}</span>
+      <i class="fa fa-trash pull-right delete"></i>
+      <i class="fa fa-thumbs-up pull-right"></i>
+      <i class="fa fa-thumbs-down pull-right"></i>
+    </div>
+
+  </div>
+</script>
+
 
 
 <!--Handlebars-->

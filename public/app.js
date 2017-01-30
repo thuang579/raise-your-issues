@@ -22,6 +22,10 @@ var database = firebase.database()
   var popupsource = $('#popUpTemplate').html();
   var popUpTemplate = Handlebars.compile(popupsource);
 
+  var postersource = $('#posterTemplate').html();
+  console.log("forhandlebars")
+  var posterTemplate = Handlebars.compile(postersource);
+
 
 
 
@@ -29,25 +33,6 @@ var database = firebase.database()
 // ----------------------------------------------------------------------------
 
 $(document).ready(function () {
-
-
-    var container = $('.mpContainer') // set .container to a variable so we don't need to find it every time we click
-    var noteCount = 1 // inital value
-
-    $('.box-creator-button').click(function() {
-      // we need to create a new box each click
-      // if $boxElement was defined in the outer function
-      // we'd be referring to the same one box
-      // thereby only being able to add one box and no additional boxes
-      var $posterNote = $('<div></div>').addClass('box') // we add '$' so we can easily tell our variable has jQuery available
-      var posterMessage = $('.box-color-note').val()
-      var posterColor = $('.box-color-input').val() // grab user color input
-      $('.box-color-input').val('') // clear out the input after we grab the value
-      $('.box-color-note').val('')
-      $posterNote.css({backgroundColor: posterColor})
-      $posterNote.html(noteCount++ + '. ' + posterMessage) // add incremented noteCount reference
-      container.append($posterNote) // append to parent element
-    })
 
 
 
@@ -68,10 +53,12 @@ $('#message-form').submit(function (event) {
 
   // create a section for messages data in your db
   var messagesReference = database.ref('messages');
+  var posterColor = $('.poster-color-input').val() // grab user color input
 
   // use the set method to save data to the messages
   messagesReference.push({
     message: message,
+    posterColor: posterColor,
     votes: 0
   })
 })
@@ -79,6 +66,12 @@ $('#message-form').submit(function (event) {
 // // on initialization of app (when document is ready) get fan messages
 getFanMessages();
 
+
+$('.grid').isotope({
+  // options
+  itemSelector: '.from-people',
+  layoutMode: 'fitRows'
+});
 
 
 
@@ -280,54 +273,50 @@ database.ref('messages').on('value', function (results) {
 
   var allMessages = results.val();
   // iterate through results coming from database call; messages
+
+  $messageBoard.empty()
+
+
+  //var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
+
+  //tried to sort
+  // database.ref('messages').on('value', function (results) {
+  //   var $messageBoard = $('.message-board')
+  //   var messages = []
+  //
+  //   var allMessages = results.val();
+  //   // iterate through results coming from database call; messages
+  //
+  //   $messageBoard.empty()
+  //
+  //
+  // var topUserPostsRef = firebase.database().ref.orderByChild('votes');
+  // console.log(topUserPostsRef)
+
+  // for Handlebars
   for (var msg in allMessages) {
-    // get method is supposed to represent HTTP GET method
-    var message = allMessages[msg].message
-    var votes = allMessages[msg].votes
 
-    // create message element
-    var $messageListElement = $('<div></div>')
 
-    // create delete element
-    var $deleteElement = $('<i class="fa fa-trash pull-right delete"></i>')
+      var message = allMessages[msg].message
+      var votes = allMessages[msg].votes
 
-    // create up vote element
-    var $upVoteElement = $('<i class="fa fa-thumbs-up pull-right"></i>')
+      var posterColor=allMessages[msg].posterColor
 
-    // create down vote element
-    var $downVoteElement = $('<i class="fa fa-thumbs-down pull-right"></i>')
+      var posterContent = {posterText: message, voteCount: votes, id: msg, posterColor: posterColor}
+      var html = posterTemplate(posterContent)
 
-    // add id as data attribute so we can refer to later for updating
-    $messageListElement.attr('data-id', msg)
-
-    // add message to li
-    $messageListElement.html(message)
-
-    // add delete element
-    $messageListElement.append($deleteElement)
-
-    // add voting elements
-    $messageListElement.append($upVoteElement)
-    $messageListElement.append($downVoteElement)
-
-    // show votes
-    $messageListElement.append('<div class="vote-count pull-right">' + votes + '</div>')
-
-    // push element to array of messages
-    messages.push($messageListElement)
-
-    // remove lis to avoid dupes
-    $messageBoard.empty()
-
-    for (var i in messages) {
-      $messageBoard.append(messages[i])
-    }
-
+      $messageBoard.append(html)
   }
+
+
+
+
+
 
   // Attach delete event listeners to all delete buttons in the message-board <ul>:
   $('div.message-board i.delete').on('click', function (event) {
-    var id = $(event.target.parentNode).data('id')
+
+    var id = $(event.currentTarget).closest('.from-people').data("id")
     // deleteMessage(id)
     database.ref('messages/' + id).remove();
     console.log("deleting", id)
@@ -335,7 +324,8 @@ database.ref('messages').on('value', function (results) {
 
   // Attach upvote even listeners to all upvote buttons in the message-board <ul>:
   $('div.message-board i.fa-thumbs-up').on('click', function (event) {
-    var id = $(event.target.parentNode).data('id')
+    var id = $(event.currentTarget).closest('.from-people').data("id")
+
     var voteCount = $(this).siblings('.vote-count').first().text()
     // Bump up the count by 1:
     voteCount++;
@@ -347,7 +337,8 @@ database.ref('messages').on('value', function (results) {
 
   // Attach downvote even listeners to all downvote buttons in the message-board <ul>:
   $('div.message-board i.fa-thumbs-down').on('click', function (event) {
-    var id = $(event.target.parentNode).data('id')
+    var id = $(event.currentTarget).closest('.from-people').data("id")
+
     var voteCount = $(this).siblings('.vote-count').first().text()
     // Decrement the count by 1:
     voteCount--;
