@@ -31,6 +31,25 @@ var database = firebase.database()
 $(document).ready(function () {
 
 
+    var container = $('.mpContainer') // set .container to a variable so we don't need to find it every time we click
+    var noteCount = 1 // inital value
+
+    $('.box-creator-button').click(function() {
+      // we need to create a new box each click
+      // if $boxElement was defined in the outer function
+      // we'd be referring to the same one box
+      // thereby only being able to add one box and no additional boxes
+      var $posterNote = $('<div></div>').addClass('box') // we add '$' so we can easily tell our variable has jQuery available
+      var posterMessage = $('.box-color-note').val()
+      var posterColor = $('.box-color-input').val() // grab user color input
+      $('.box-color-input').val('') // clear out the input after we grab the value
+      $('.box-color-note').val('')
+      $posterNote.css({backgroundColor: posterColor})
+      $posterNote.html(noteCount++ + '. ' + posterMessage) // add incremented noteCount reference
+      container.append($posterNote) // append to parent element
+    })
+
+
 
 // /////////////////////////////////////////////////////////////////////////////
 // -------------------------------FROM THE PEOPLE-------------------------------
@@ -74,6 +93,7 @@ var jsonresponse;
 var feedItems;
 
 var newyorktimesUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FPolitics.xml'
+var cnnUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.cnn.com%2Frss%2Fcnn_allpolitics.rss'
 var breitbartUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.feedburner.com%2Fbreitbart';
 var foxUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.foxnews.com%2Ffoxnews%2Fpolitics';
 
@@ -168,6 +188,24 @@ $('.dropdown-feed').on('click',function(e){
   $('#main').empty()
   loadFeed($(e.currentTarget).data('feed-url'))
   console.log("dropdown-feed clicked")
+
+  console.log(($(e.currentTarget).data('feed-url')))
+
+  var $selectedFeed = ($(e.currentTarget).data('feed-url'))
+
+  if ($selectedFeed = newyorktimesUrl){
+    $('#main').addClass('nytimes-color');
+    console.log("test")
+  } else if ($selectedFeed = cnnUrl){
+    $('#main').addClass('cnn-color');
+  } else if ($selectedFeed = foxUrl){
+    $('#main').addClass('fox-color');
+  } else if ($selectedFeed = breitbartUrl){
+    $('#main').addClass('breitbart-color');
+  }
+
+
+
 })
 
 
