@@ -49,9 +49,21 @@ line-height:1.5em;
   height: 300px;
   margin: 5px;
   padding: 10px;
+  text-align: center;
 }
 
+.from-people .poster{
+  padding-top:25px;
+  font-size: 1.5em;
+  line-height: 1.25em;
+}
 
+.from-people .poster-actions{
+  position: absolute;
+		bottom: 0;
+    float:right;
+    right: 0;
+}
 
 
 /*//////////////////FROM THE MEDIA */
