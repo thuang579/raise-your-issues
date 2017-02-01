@@ -27,6 +27,19 @@ line-height:1.5em;
 }
 
 
+/*//////////////////FOR LINKS */
+
+/* unvisited link */
+a:link {
+    color: blue;
+}
+
+/* visited link */
+a:visited {
+    color: blue;
+}
+
+
 
 
 .miniposter{
@@ -110,28 +123,27 @@ line-height:1.5em;
 
 .article .articleContent h3 {
   margin-bottom: 0;
-  color: blue;
 }
 
 
 /*four colors for four news sources*/
-.article .articleContent .nytimes-color h3 {
+.nytimes-color h3 {
   margin-bottom: 0;
   color: blue;
 }
 
 
-.article .articleContent .cnn-color h3 {
+.cnn-color h3 {
   margin-bottom: 0;
   color: #5100AE;
 }
 
-.article .articleContent .fox-color h3 {
+.fox-color h3 {
   margin-bottom: 0;
   color: #B40048;
 }
 
-.article .articleContent .breitbart-color h3 {
+.breitbart-color h3 {
   margin-bottom: 0;
   color: red;
 }
@@ -149,5 +161,5 @@ line-height:1.5em;
   font-size: 30px;
   margin-top: 15px;
   text-align: right;
-  color: #097FB2;
+  color: blue;
 }

@@ -63,8 +63,8 @@ $('#message-form').submit(function (event) {
   })
 })
 
-// // on initialization of app (when document is ready) get fan messages
-getFanMessages();
+// // on initialization of app (when document is ready) get messages
+getPosterMessages();
 
 
 $('.grid').isotope({
@@ -183,18 +183,38 @@ $('.dropdown-feed').on('click',function(e){
   console.log("dropdown-feed clicked")
 
   console.log(($(e.currentTarget).data('feed-url')))
+  console.log("---")
 
   var $selectedFeed = ($(e.currentTarget).data('feed-url'))
 
-  if ($selectedFeed = newyorktimesUrl){
+  console.log("the selection feed is " + $selectedFeed);
+
+  function clearColorClass(){
+    $('#main').removeClass('nytimes-color');
+    $('#main').removeClass('cnn-color');
+    $('#main').removeClass('fox-color');
+    $('#main').removeClass('breitbart-color');
+  }
+
+  if ($selectedFeed === newyorktimesUrl){
+    clearColorClass();
     $('#main').addClass('nytimes-color');
-    console.log("test")
-  } else if ($selectedFeed = cnnUrl){
+    console.log("nytimes clicked")
+
+  } else if ($selectedFeed === cnnUrl){
+    clearColorClass();
     $('#main').addClass('cnn-color');
-  } else if ($selectedFeed = foxUrl){
+    console.log("cnn clicked")
+
+  } else if ($selectedFeed === foxUrl){
+    clearColorClass();
     $('#main').addClass('fox-color');
-  } else if ($selectedFeed = breitbartUrl){
+    console.log("fox clicked")
+
+  } else if ($selectedFeed === breitbartUrl){
+    clearColorClass();
     $('#main').addClass('breitbart-color');
+    console.log("breitbart clicked")
   }
 
 
@@ -264,34 +284,51 @@ console.log(jsonresponse);
 
 // ----------------------------------------------------------------------------
 
-function getFanMessages() {
+function getPosterMessages() {
 // retrieve messages data when .on() initially executes
 // and when its data updates
-database.ref('messages').on('value', function (results) {
-  var $messageBoard = $('.message-board')
-  var messages = []
 
-  var allMessages = results.val();
-  // iterate through results coming from database call; messages
+//code working
+// database.ref('messages').on('value', function (results) {
+//   var $messageBoard = $('.message-board')
+//   var messages = []
+//
+//   var allMessages = results.val();
+//   // iterate through results coming from database call; messages
+//
+//   $messageBoard.empty()
 
-  $messageBoard.empty()
+
+  //trying to sort by highest voted
+  //database.ref('messages').on('value', function (results) {
+  database.ref('messages').orderByChild('votes').on('value', function (results) {
+
+    var $messageBoard = $('.message-board')
+    var messages = []
+
+    //var votes = allMessages[msg].votes
+
+    var allMessages = results.val();
+    // iterate through results coming from database call; messages
+
+    $messageBoard.empty()
 
 
+  var topPostersRef = firebase.database().ref('messages').orderByChild('votes');
+  console.log("========")
+  //how to work with what's getting returned here?
+  console.log(topPostersRef)
+  console.log("========")
+
+
+  //ref from firebase documentation
   //var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
 
-  //tried to sort
-  // database.ref('messages').on('value', function (results) {
-  //   var $messageBoard = $('.message-board')
-  //   var messages = []
-  //
-  //   var allMessages = results.val();
-  //   // iterate through results coming from database call; messages
-  //
-  //   $messageBoard.empty()
-  //
-  //
-  // var topUserPostsRef = firebase.database().ref.orderByChild('votes');
-  // console.log(topUserPostsRef)
+  // var topPostersRef2 = firebase.database().ref('messages').orderByValue('votes');
+  // console.log(topPostersRef2)
+
+
+
 
   // for Handlebars
   for (var msg in allMessages) {
