@@ -75,6 +75,7 @@
 <h2 style="text-align:center; color:white;">FROM PEOPLE</h2>
 
   <div class="container">
+
     <div class="panel-group">
       <div class="panel panel-danger">
         <div class="panel-heading" style="color:black; background-color:#f5f5f5;">Write Your Message</div>
@@ -112,6 +113,25 @@
 
       </div>
     </div>
+
+
+
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">Photos from 500px</div>
+
+
+        <div class="panel-body">
+
+          <div id="image-board">
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
   </div>
 
 
@@ -165,6 +185,18 @@
 </script>
 
 
+
+<!--Handlebars for Photos-->
+<script id="photoTemplate" type="text/x-handlebars-template">
+  <div class="image">
+
+
+      <img src="{{imgUrl}}"/>
+
+
+
+  </div>
+</script>
 
 <!--Handlebars-->
 
@@ -246,6 +278,7 @@
 
 <!-- js -->
 <script src="app.js"></script>
+<script src="500px.js"></script>
 
 
 </body>

@@ -53,6 +53,24 @@ a:visited {
 }
 
 
+/*//////////////////FOR 500px images */
+.image{
+  position: relative;
+  float: left;
+  width: 295px;
+  height: 295px;
+  margin: 15px;
+  padding: 15px;
+}
+
+.image .photo{
+  padding-top:25px;
+}
+
+
+
+
+
 
 /*//////////////////FOR MINI-POSTER */
 .from-people{

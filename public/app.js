@@ -14,7 +14,6 @@ var database = firebase.database()
 
 
 
-
 //Compile elements using handlebars
   var source = $('#articleItemTemplate').html();
   var articleItemTemplate = Handlebars.compile(source);
@@ -23,8 +22,11 @@ var database = firebase.database()
   var popUpTemplate = Handlebars.compile(popupsource);
 
   var postersource = $('#posterTemplate').html();
-  console.log("forhandlebars")
   var posterTemplate = Handlebars.compile(postersource);
+
+  var photosource = $('#photoTemplate').html();
+  var photoTemplate = Handlebars.compile(photosource);
+
 
 
 
@@ -34,101 +36,102 @@ var database = firebase.database()
 
 $(document).ready(function () {
 
+  //initialize 500px
+  _500px.init({
+    sdk_key: 'e5b8b1fd9d9a3a4802f16cc420af6cf45a8591cf'
+  });
 
 
-// /////////////////////////////////////////////////////////////////////////////
-// -------------------------------FROM THE PEOPLE-------------------------------
+  get500Photos();
 
 
-$('#message-form').submit(function (event) {
-  // by default a form submit reloads the DOM which will subsequently reload all our JS
-  // to avoid this we preventDefault()
-  event.preventDefault()
 
-  // grab user message input
-  var message = $('#message').val()
+  // /////////////////////////////////////////////////////////////////////////////
+  // -------------------------------FROM THE PEOPLE-------------------------------
 
-  // clear message input (for UX purposes)
-  $('#message').val('')
 
-  // create a section for messages data in your db
-  var messagesReference = database.ref('messages');
-  var posterColor = $('.poster-color-input').val() // grab user color input
+  $('#message-form').submit(function (event) {
+    // by default a form submit reloads the DOM which will subsequently reload all our JS
+    // to avoid this we preventDefault()
+    event.preventDefault()
 
-  // use the set method to save data to the messages
-  messagesReference.push({
-    message: message,
-    posterColor: posterColor,
-    votes: 0
+    // grab user message input
+    var message = $('#message').val()
+
+    // clear message input (for UX purposes)
+    $('#message').val('')
+
+    // create a section for messages data in your db
+    var messagesReference = database.ref('messages');
+    var posterColor = $('.poster-color-input').val() // grab user color input
+
+    // use the set method to save data to the messages
+    messagesReference.push({
+      message: message,
+      posterColor: posterColor,
+      votes: 0
+    })
   })
-})
 
-// // on initialization of app (when document is ready) get messages
-getPosterMessages();
+  // // on initialization of app (when document is ready) get messages
+  getPosterMessages();
 
 
-$('.grid').isotope({
-  // options
-  itemSelector: '.from-people',
-  layoutMode: 'fitRows'
-});
-
+  $('.grid').isotope({
+    // options
+    itemSelector: '.from-people',
+    layoutMode: 'fitRows'
+  });
 
 
 
-// /////////////////////////////////////////////////////////////////////////////
-// -------------------------------FROM THE MEDIA-------------------------------
+
+  // /////////////////////////////////////////////////////////////////////////////
+  // -------------------------------FROM THE MEDIA-------------------------------
 
 
-//global variable to have value set in and accessed outside get api request?
-var jsonresponse;
+  //global variable to have value set in and accessed outside get api request?
+  var jsonresponse;
 
-var feedItems;
+  var feedItems;
 
-var newyorktimesUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FPolitics.xml'
-var cnnUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.cnn.com%2Frss%2Fcnn_allpolitics.rss'
-var breitbartUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.feedburner.com%2Fbreitbart';
-var foxUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.foxnews.com%2Ffoxnews%2Fpolitics';
-
-
-
-//ajax code for if error
-$.ajax({
-    url: "https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.foxnews.com%2Ffoxnews%2Fpolitics",
-
-    data: {
-        format: "json"
-    },
-
-    success: function() {
-        console.log("success");
-    },
-
-    error: function(){
-        alert("Problem loading feed!")
-    }
-})
+  var newyorktimesUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FPolitics.xml'
+  var cnnUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.cnn.com%2Frss%2Fcnn_allpolitics.rss'
+  var breitbartUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.feedburner.com%2Fbreitbart';
+  var foxUrl = 'https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.foxnews.com%2Ffoxnews%2Fpolitics';
 
 
 
-//expand search on click
-$('#search').click(function(){
-    console.log("search clicked")
-    $('#search').toggleClass('active');
-})
+  //ajax code for if error
+  $.ajax({
+      url: "https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.foxnews.com%2Ffoxnews%2Fpolitics",
+
+      data: {
+          format: "json"
+      },
+
+      success: function() {
+          console.log("success");
+      },
+
+      error: function(){
+          alert("Problem loading feed!")
+      }
+  })
 
 
-//load with new feed
-function loadFeed(feedUrl){
-  //add loader when getting data
-  //$('#popUp').removeClass('hidden');
 
 
-  $.get(feedUrl, function(r){
+  //load with new feed
+  function loadFeed(feedUrl){
+    //add loader when getting data
+    //$('#popUp').removeClass('hidden');
 
-  feedItems = r.items
+    $.get(feedUrl, function(r){
 
-  console.log("loadFeed called")
+    feedItems = r.items
+
+    console.log("loadFeed called")
 
 
   //handlebars repopulating
@@ -176,104 +179,104 @@ function loadFeed(feedUrl){
 
 
 
-//to call loadFeed with selected source
-$('.dropdown-feed').on('click',function(e){
-  $('#main').empty()
-  loadFeed($(e.currentTarget).data('feed-url'))
-  console.log("dropdown-feed clicked")
+  //to call loadFeed with selected source
+  $('.dropdown-feed').on('click',function(e){
+    $('#main').empty()
+    loadFeed($(e.currentTarget).data('feed-url'))
+    console.log("dropdown-feed clicked")
 
-  console.log(($(e.currentTarget).data('feed-url')))
-  console.log("---")
+    console.log(($(e.currentTarget).data('feed-url')))
+    console.log("---")
 
-  var $selectedFeed = ($(e.currentTarget).data('feed-url'))
+    var $selectedFeed = ($(e.currentTarget).data('feed-url'))
 
-  console.log("the selection feed is " + $selectedFeed);
+    console.log("the selection feed is " + $selectedFeed);
 
-  function clearColorClass(){
-    $('#main').removeClass('nytimes-color');
-    $('#main').removeClass('cnn-color');
-    $('#main').removeClass('fox-color');
-    $('#main').removeClass('breitbart-color');
-  }
+    function clearColorClass(){
+      $('#main').removeClass('nytimes-color');
+      $('#main').removeClass('cnn-color');
+      $('#main').removeClass('fox-color');
+      $('#main').removeClass('breitbart-color');
+    }
 
-  if ($selectedFeed === newyorktimesUrl){
-    clearColorClass();
-    $('#main').addClass('nytimes-color');
-    console.log("nytimes clicked")
+    if ($selectedFeed === newyorktimesUrl){
+      clearColorClass();
+      $('#main').addClass('nytimes-color');
+      console.log("nytimes clicked")
 
-  } else if ($selectedFeed === cnnUrl){
-    clearColorClass();
-    $('#main').addClass('cnn-color');
-    console.log("cnn clicked")
+    } else if ($selectedFeed === cnnUrl){
+      clearColorClass();
+      $('#main').addClass('cnn-color');
+      console.log("cnn clicked")
 
-  } else if ($selectedFeed === foxUrl){
-    clearColorClass();
-    $('#main').addClass('fox-color');
-    console.log("fox clicked")
+    } else if ($selectedFeed === foxUrl){
+      clearColorClass();
+      $('#main').addClass('fox-color');
+      console.log("fox clicked")
 
-  } else if ($selectedFeed === breitbartUrl){
-    clearColorClass();
-    $('#main').addClass('breitbart-color');
-    console.log("breitbart clicked")
-  }
-
-
-
-})
-
-
-
-//initial call to New York Times feed
-$.get(newyorktimesUrl, function(r){
-  console.log(r);
-
-  feedItems = r.items;
-
-  jsonresponse = r;
-
-
-    for (var i = 0; i < 10; i++) {
-
-          var itemContent = {i: i, imageurl: feedItems[i].thumbnail, title: feedItems[i].title}
-          var html = articleItemTemplate(itemContent)
-
-          $("#main").append(html)
+    } else if ($selectedFeed === breitbartUrl){
+      clearColorClass();
+      $('#main').addClass('breitbart-color');
+      console.log("breitbart clicked")
     }
 
 
-  //remove loader when get data
-  $('#popUp').addClass('hidden');
 
-
-  //open popUp on click
-  $('#main article').click(function(e){
-    console.log("test")
-
-    //open popUp
-    $('#popUp').removeClass('hidden');
-
-    //set popUp contents
-    var i = $(e.currentTarget).data('i')
-    var popupContent = {title: feedItems[i].title, description: feedItems[i].description, link: feedItems[i].link}
-
-    //remove loader when get data
-    $('#popUp').removeClass('loader');
-
-    //populate template
-    var html = popUpTemplate(popupContent)
-    $('#popUp').html(html)
-
-    //close popUp
-    $('.closePopUp').click(function(){
-      $('#popUp').addClass('hidden');
-      console.log("x clicked")
-    })
   })
 
 
-})
 
-console.log(jsonresponse);
+  //initial call to New York Times feed
+  $.get(newyorktimesUrl, function(r){
+    console.log(r);
+
+    feedItems = r.items;
+
+    jsonresponse = r;
+
+
+      for (var i = 0; i < 10; i++) {
+
+            var itemContent = {i: i, imageurl: feedItems[i].thumbnail, title: feedItems[i].title}
+            var html = articleItemTemplate(itemContent)
+
+            $("#main").append(html)
+      }
+
+
+    //remove loader when get data
+    $('#popUp').addClass('hidden');
+
+
+    //open popUp on click
+    $('#main article').click(function(e){
+      console.log("test")
+
+      //open popUp
+      $('#popUp').removeClass('hidden');
+
+      //set popUp contents
+      var i = $(e.currentTarget).data('i')
+      var popupContent = {title: feedItems[i].title, description: feedItems[i].description, link: feedItems[i].link}
+
+      //remove loader when get data
+      $('#popUp').removeClass('loader');
+
+      //populate template
+      var html = popUpTemplate(popupContent)
+      $('#popUp').html(html)
+
+      //close popUp
+      $('.closePopUp').click(function(){
+        $('#popUp').addClass('hidden');
+        console.log("x clicked")
+      })
+    })
+
+
+  })
+
+  console.log(jsonresponse);
 
 
 });
@@ -283,6 +286,46 @@ console.log(jsonresponse);
 
 
 // ----------------------------------------------------------------------------
+
+function get500Photos(){
+
+
+    // search the API for poster photos
+  _500px.api('/photos/search', {term: "demonstration march poster", image_size: 3}, function(response) {
+    if (response.data.photos.length == 0) {
+      alert('No photos found!');
+    } else {
+      handleResponseSuccess(response);
+    }
+  });
+
+
+  function handleResponseSuccess(response) {
+    console.log("response from 500",response)
+    var allData = response.data.photos;
+
+
+    // for Handlebars
+
+    $.each(allData, function() {
+
+      var imgUrl = {imgUrl: this.image_url}
+      var html = photoTemplate(imgUrl)
+
+      $('#image-board').append(html)
+
+    });
+
+    // $('#image-board').isotope({
+    //   // options
+    //   itemSelector: "img",
+    //   layoutMode: 'fitRows'
+    // });
+
+  }
+
+}
+
 
 function getPosterMessages() {
 // retrieve messages data when .on() initially executes
