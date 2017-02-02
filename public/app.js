@@ -71,6 +71,9 @@ $(document).ready(function () {
       posterColor: posterColor,
       votes: 0
     })
+
+    // clear color input (for UX purposes)
+    $('.poster-color-input').val('');
   })
 
   // // on initialization of app (when document is ready) get messages
@@ -124,8 +127,9 @@ $(document).ready(function () {
 
   //load with new feed
   function loadFeed(feedUrl){
+
     //add loader when getting data
-    //$('#popUp').removeClass('hidden');
+    $('#popUp').removeClass('hidden');
 
     $.get(feedUrl, function(r){
 
@@ -145,7 +149,7 @@ $(document).ready(function () {
 
 
   //remove loader when get data
-  //$('#popUp').addClass('hidden');
+  $('#popUp').addClass('hidden');
 
 
   //open popUp on click
@@ -180,7 +184,7 @@ $(document).ready(function () {
 
 
   //to call loadFeed with selected source
-  $('.dropdown-feed').on('click',function(e){
+  $('.headline-feed').on('click',function(e){
     $('#main').empty()
     loadFeed($(e.currentTarget).data('feed-url'))
     console.log("dropdown-feed clicked")
@@ -306,13 +310,18 @@ function get500Photos(){
 
 
     // for Handlebars
+    var i = 0
 
-    $.each(allData, function() {
+    $.each(allData, function(data) {
 
       var imgUrl = {imgUrl: this.image_url}
       var html = photoTemplate(imgUrl)
 
       $('#image-board').append(html)
+
+      if(++i > 8) {
+         return false;
+       }
 
     });
 
@@ -328,28 +337,11 @@ function get500Photos(){
 
 
 function getPosterMessages() {
-// retrieve messages data when .on() initially executes
-// and when its data updates
 
-//code working
-// database.ref('messages').on('value', function (results) {
-//   var $messageBoard = $('.message-board')
-//   var messages = []
-//
-//   var allMessages = results.val();
-//   // iterate through results coming from database call; messages
-//
-//   $messageBoard.empty()
-
-
-  //trying to sort by highest voted
-  //database.ref('messages').on('value', function (results) {
   database.ref('messages').orderByChild('votes').on('value', function (results) {
 
     var $messageBoard = $('.message-board')
     var messages = []
-
-    //var votes = allMessages[msg].votes
 
     var allMessages = results.val();
     // iterate through results coming from database call; messages
@@ -366,9 +358,6 @@ function getPosterMessages() {
 
   //ref from firebase documentation
   //var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
-
-  // var topPostersRef2 = firebase.database().ref('messages').orderByValue('votes');
-  // console.log(topPostersRef2)
 
 
 
@@ -402,6 +391,19 @@ function getPosterMessages() {
     console.log("deleting", id)
   })
 
+  // Attach downvote even listeners to all downvote buttons in the message-board <ul>:
+  $('div.message-board i.fa-thumbs-down').on('click', function (event) {
+    var id = $(event.currentTarget).closest('.from-people').data("id")
+
+    var voteCount = $(this).siblings('.vote-count').first().text()
+    // Decrement the count by 1:
+    voteCount--;
+    // Update the vote count in firebase:
+    database.ref('messages/' + id).update({
+      votes: parseInt(voteCount)
+    })
+  })
+
   // Attach upvote even listeners to all upvote buttons in the message-board <ul>:
   $('div.message-board i.fa-thumbs-up').on('click', function (event) {
     var id = $(event.currentTarget).closest('.from-people').data("id")
@@ -415,18 +417,7 @@ function getPosterMessages() {
     })
   })
 
-  // Attach downvote even listeners to all downvote buttons in the message-board <ul>:
-  $('div.message-board i.fa-thumbs-down').on('click', function (event) {
-    var id = $(event.currentTarget).closest('.from-people').data("id")
 
-    var voteCount = $(this).siblings('.vote-count').first().text()
-    // Decrement the count by 1:
-    voteCount--;
-    // Update the vote count in firebase:
-    database.ref('messages/' + id).update({
-      votes: parseInt(voteCount)
-    })
-  })
 
 })
 

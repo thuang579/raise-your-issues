@@ -100,7 +100,7 @@
 
     <div class="panel-group">
       <div class="panel panel-default">
-        <div class="panel-heading">Your Issues</div>
+        <div class="panel-heading">Mini-Posters From The People</div>
 
         <h4>
         <div class="panel-body">
@@ -118,10 +118,10 @@
 
     <div class="panel-group">
       <div class="panel panel-default">
-        <div class="panel-heading">Photos from 500px</div>
+        <div class="panel-heading">Demonstration March Posters From 500px</div>
 
 
-        <div class="panel-body">
+        <div class="panel-body" style="padding-bottom:3em">
 
           <div id="image-board">
           </div>
@@ -148,10 +148,10 @@
 
 <header>
   <section class="container">
-    <a style="padding-left:5em; color:black" class="dropdown-feed" id="newyorktimes" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FPolitics.xml">New York Times</a>
-    <a style="padding-left:5em; color:black" class="dropdown-feed" id="cnn" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.cnn.com%2Frss%2Fcnn_allpolitics.rss">CNN</a>
-    <a style="padding-left:5em; color:black" class="dropdown-feed" id="fox" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.foxnews.com%2Ffoxnews%2Fpolitics">Fox News</a>
-    <a style="padding-left:5em; color:black" class="dropdown-feed" id="breitbart" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.feedburner.com%2Fbreitbart">Breitbart</a>
+    <a style="color:black" class="headline-feed" id="newyorktimes" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FPolitics.xml">New York Times</a>
+    <a style="color:black" class="headline-feed" id="cnn" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Frss.cnn.com%2Frss%2Fcnn_allpolitics.rss">CNN</a>
+    <a style="color:black" class="headline-feed" id="fox" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.foxnews.com%2Ffoxnews%2Fpolitics">Fox News</a>
+    <a style="color:black" class="headline-feed" id="breitbart" href="#from-media" data-feed-url="https://api.rss2json.com/v1/api.json?rss_url=http%3A%2F%2Ffeeds.feedburner.com%2Fbreitbart">Breitbart</a>
   </section>
 </header>
 
@@ -177,8 +177,8 @@
     <div class="poster-actions">
       <span class="vote-count">{{voteCount}}</span>
       <i class="fa fa-trash pull-right delete"></i>
-      <i class="fa fa-thumbs-up pull-right"></i>
       <i class="fa fa-thumbs-down pull-right"></i>
+      <i class="fa fa-thumbs-up pull-right"></i>
     </div>
 
   </div>
@@ -191,7 +191,7 @@
   <div class="image">
 
 
-      <img src="{{imgUrl}}"/>
+      <img src="{{imgUrl}}" width="333px" height="333px"/>
 
 
 
@@ -219,10 +219,11 @@
 
     <script id="popUpTemplate" type="text/x-handlebars-template">
 
-      <a href="#from-media" class="closePopUp">X</a>
+      <a href="#from-media" class="closePopUp">x</a>
 
       <div class="container">
         <h1>{{title}}</h1>
+        <br/><br/>
         <p>
           {{{description}}}
         </p>
