@@ -41,13 +41,13 @@ $(document).ready(function () {
     sdk_key: 'e5b8b1fd9d9a3a4802f16cc420af6cf45a8591cf'
   });
 
-
   get500Photos();
 
 
 
+
   // /////////////////////////////////////////////////////////////////////////////
-  // -------------------------------FROM THE PEOPLE-------------------------------
+  // -------------------------------FROM PEOPLE-------------------------------
 
 
   $('#message-form').submit(function (event) {
@@ -93,7 +93,7 @@ $(document).ready(function () {
   // -------------------------------FROM THE MEDIA-------------------------------
 
 
-  //global variable to have value set in and accessed outside get api request?
+  //global variable to have value set in and accessed outside get api request
   var jsonresponse;
 
   var feedItems;
@@ -190,7 +190,6 @@ $(document).ready(function () {
     console.log("dropdown-feed clicked")
 
     console.log(($(e.currentTarget).data('feed-url')))
-    console.log("---")
 
     var $selectedFeed = ($(e.currentTarget).data('feed-url'))
 
@@ -310,6 +309,8 @@ function get500Photos(){
 
 
     // for Handlebars
+
+    //to set counter to set limit inside
     var i = 0
 
     $.each(allData, function(data) {
@@ -325,11 +326,6 @@ function get500Photos(){
 
     });
 
-    // $('#image-board').isotope({
-    //   // options
-    //   itemSelector: "img",
-    //   layoutMode: 'fitRows'
-    // });
 
   }
 
@@ -347,17 +343,6 @@ function getPosterMessages() {
     // iterate through results coming from database call; messages
 
     $messageBoard.empty()
-
-
-  var topPostersRef = firebase.database().ref('messages').orderByChild('votes');
-  console.log("========")
-  //how to work with what's getting returned here?
-  console.log(topPostersRef)
-  console.log("========")
-
-
-  //ref from firebase documentation
-  //var topUserPostsRef = firebase.database().ref('user-posts/' + myUserId).orderByChild('starCount');
 
 
 
